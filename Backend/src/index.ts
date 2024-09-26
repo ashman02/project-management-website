@@ -3,6 +3,7 @@ import cors from "cors"
 import { expressMiddleware } from "@apollo/server/express4"
 import createGraphqlServer from "./graphql"
 import dotenv from "dotenv"
+import connectDB from "./db"
 
 dotenv.config({
     path : "./.env"
@@ -22,9 +23,13 @@ async function init() {
   app.use(express.urlencoded({ extended: true, limit: "16kb" }))
 
   app.use(express.static("public"))
+
+  await connectDB()
   
   app.use("/graphql", expressMiddleware(await createGraphqlServer()))
-
+  
   app.listen(process.env.PORT || 8000, () => console.log("App is listening to the post 8000"))
 }
+
+init()
 
