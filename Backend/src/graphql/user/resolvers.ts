@@ -1,7 +1,12 @@
+import { JwtPayload } from "jsonwebtoken"
 import UserService from "../../services/user"
 import { loginPayload, RegisterUserPayload, VerifyUserPayload } from "../../utils/types"
 
-const queries = {}
+const queries = {
+    getCurrentUser : async(_ : any, params : any, context : JwtPayload) => {
+        return await UserService.getCurrectUser(context)
+    }
+}
 const mutations = {
     registerUser : async (_ : any, payload : RegisterUserPayload) => {
         return await UserService.registerUser(payload)
@@ -14,6 +19,9 @@ const mutations = {
     },
     refreshAccessToken : async(_: any, payload : {incomingRefreshToken : string}) => {
         return await UserService.refreshAccessToken(payload)
+    },
+    logoutUser : async (_ : any, para: any, context : JwtPayload) => {
+        return await UserService.logoutUser(context)
     }
 }
 

@@ -33,7 +33,6 @@ async function createGraphqlServer() {
             scalar Date
             ${User.typeDefs}
             type Query {
-                hello : String
                 ${User.queries}
             }
             type Mutation {
@@ -43,7 +42,6 @@ async function createGraphqlServer() {
     resolvers: {
       Date: dateScalar,
       Query: {
-        hello : () => "Hello",
         ...User.resolvers.queries,
       },
       Mutation: {

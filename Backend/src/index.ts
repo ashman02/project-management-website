@@ -4,9 +4,10 @@ import { expressMiddleware } from "@apollo/server/express4"
 import createGraphqlServer from "./graphql"
 import dotenv from "dotenv"
 import connectDB from "./db"
+import UserService from "./services/user"
 
 dotenv.config({
-    path : "./.env"
+  path: "./.env",
 })
 
 async function init() {
@@ -25,11 +26,25 @@ async function init() {
   app.use(express.static("public"))
 
   await connectDB()
-  
-  app.use("/graphql", expressMiddleware(await createGraphqlServer()))
-  
-  app.listen(process.env.PORT || 8000, () => console.log("App is listening to the post 8000"))
+
+  app.use(
+    "/graphql",
+    expressMiddleware(await createGraphqlServer(), {
+      context: async ({ req }) => {
+        const accessToken = req.headers["authorization"] as string
+        try {
+          const user = await UserService.decodeAccessToken(accessToken)
+          return { user }
+        } catch (error) {
+          return {}
+        }
+      },
+    })
+  )
+
+  app.listen(process.env.PORT || 8000, () =>
+    console.log("App is listening to the post 8000")
+  )
 }
 
 init()
-

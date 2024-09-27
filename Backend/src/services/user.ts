@@ -39,6 +39,11 @@ class UserService {
     return { accessToken, refreshToken }
   }
 
+  // you can improve this by fetching original user from the database and checking if it exists
+  public static async decodeAccessToken(accessToken: string) {
+    return jwt.verify(accessToken, process.env.ACCESS_TOKEN_SECRET as string)
+  }
+
   public static async registerUser(payload: RegisterUserPayload) {
     const { username, email, password, fullName } = payload
 
@@ -235,6 +240,45 @@ class UserService {
       throw new GraphQLError(
         "Unexpected error occured while refreshing access token"
       )
+    }
+  }
+
+  public static async logoutUser(context: JwtPayload) {
+    try {
+      if (!context || !context.user) {
+        throw new GraphQLError("Unauthorized request - please login to logout")
+      }
+
+      await UserModel.findByIdAndUpdate(
+        context.user._id,
+        {
+          $unset: {
+            refreshToken: 1,
+          },
+        },
+        { new: true }
+      )
+
+      return "User logged out successfully"
+    } catch (error) {
+      if(error instanceof GraphQLError) throw error
+      console.log("error while logging out user", error)
+      throw new GraphQLError("Unexpected error occured while logging out user")
+    }
+  }
+  
+  public static async getCurrectUser(context : JwtPayload){
+    try {
+      if(!context || !context.user){
+        throw new GraphQLError("Unauthorized request")
+      }
+
+      const user = await UserModel.findById(context.user._id)
+      return user
+    } catch (error) {
+      if(error instanceof GraphQLError) throw error
+      console.log("error while getting current user", error)
+      throw new GraphQLError("Unexpected error occured while getting current user")
     }
   }
 }
