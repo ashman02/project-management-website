@@ -8,4 +8,10 @@ export const typeDefs = `#graphql
         createdAt : Date
         updatedAt : Date
     }
+    
+    type AuthPayload {
+        user : User
+        accessToken : String
+        refreshToken : String
+    }
 `

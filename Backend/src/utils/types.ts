@@ -10,9 +10,15 @@ export interface VerifyUserPayload {
     username : string
 }
 
-export interface JwtPayload  {
+export interface JwtGeneratePayload  {
     _id : string
     username : string
     email : string
     fullName? : string
+}
+
+export interface loginPayload {
+    username? : string
+    email? : string
+    password : string
 }
