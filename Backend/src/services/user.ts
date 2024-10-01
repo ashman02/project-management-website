@@ -3,6 +3,7 @@ import { UserModel } from "../models/user.model"
 import bcrypt from "bcrypt"
 import { sendVerificationEmail } from "../utils/sendVerificationCode"
 import {
+  AvatarPayload,
   JwtGeneratePayload,
   loginPayload,
   RegisterUserPayload,
@@ -261,24 +262,87 @@ class UserService {
 
       return "User logged out successfully"
     } catch (error) {
-      if(error instanceof GraphQLError) throw error
+      if (error instanceof GraphQLError) throw error
       console.log("error while logging out user", error)
       throw new GraphQLError("Unexpected error occured while logging out user")
     }
   }
-  
-  public static async getCurrectUser(context : JwtPayload){
+
+  public static async getCurrectUser(context: JwtPayload) {
     try {
-      if(!context || !context.user){
+      if (!context || !context.user) {
         throw new GraphQLError("Unauthorized request")
       }
 
       const user = await UserModel.findById(context.user._id)
       return user
     } catch (error) {
-      if(error instanceof GraphQLError) throw error
+      if (error instanceof GraphQLError) throw error
       console.log("error while getting current user", error)
-      throw new GraphQLError("Unexpected error occured while getting current user")
+      throw new GraphQLError(
+        "Unexpected error occured while getting current user"
+      )
+    }
+  }
+
+  public static async checkUniqueUsername(payload: { username: string }) {
+    const { username } = payload
+    try {
+      const usernameRegex = /^[a-zA-Z][a-zA-Z0-9._]{3,16}$/
+
+      const isValid = usernameRegex.test(decodeURI(username))
+
+      if (!isValid) {
+        throw new GraphQLError(
+          "Username must start with a letter and must be between 4 and 16 characters long can only contain letters, numbers, . and _"
+        )
+      }
+
+      const user = await UserModel.findOne({ username })
+
+      if (user) {
+        throw new GraphQLError("Username not available")
+      }
+
+      return "Username is available"
+    } catch (error) {
+      if (error instanceof GraphQLError) throw error
+      console.log("error while checking unique username", error)
+      throw new GraphQLError(
+        "Unexpected error occured while checking unique username"
+      )
+    }
+  }
+
+  public static async updateUserAvatar(payload: {
+    avatar: AvatarPayload
+    userDetails: JwtPayload
+  }) {
+    const { avatar, userDetails } = payload
+    try {
+      if (!userDetails || !userDetails.user) {
+        throw new GraphQLError("Unauthorized request")
+      }
+      const user = await UserModel.findByIdAndUpdate(
+        userDetails.user._id,
+        {
+          $set: {
+            avatar,
+          },
+        },
+        { new: true }
+      )
+
+      if (!user) {
+        throw new GraphQLError("User not found")
+      }
+      return user
+    } catch (error) {
+      if (error instanceof GraphQLError) throw error
+      console.log("error while updating user avatar", error)
+      throw new GraphQLError(
+        "Unexpected error occured while updating user avatar"
+      )
     }
   }
 }

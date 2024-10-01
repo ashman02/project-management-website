@@ -4,4 +4,5 @@ export const mutations = `#graphql
     loginUser(username : String, email : String, password : String!) : AuthPayload
     refreshAccessToken(incomingRefreshToken : String!) : AuthPayload
     logoutUser: String
+    updateUserAvatar(fileId : String!, url : String!) : User
 `

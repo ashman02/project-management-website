@@ -23,3 +23,7 @@ export interface loginPayload {
     password : string
 }
 
+export interface AvatarPayload {
+    fileId : string
+    url : string
+}

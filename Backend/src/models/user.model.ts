@@ -1,61 +1,69 @@
-import mongoose, {Schema, Document} from "mongoose";
+import mongoose, { Schema, Document } from "mongoose"
 
 export interface UserInterface extends Document {
-    _id : string;
-    username : string;
-    fullName : string;
-    email : string;
-    password : string;
-    avatar : string;
-    verifyCode : string;
-    isVerified : boolean;
-    verifyCodeExpiry : Date;
-    refreshToken : string;
-    createdAt : Date;
-    updatedAt : Date
-    generateAccessToken() : string
-    generateRefreshToken() : string
+  _id: string
+  username: string
+  fullName: string
+  email: string
+  password: string
+  avatar: {
+    url: string
+    fileId: string
+  }
+  verifyCode: string
+  isVerified: boolean
+  verifyCodeExpiry: Date
+  refreshToken: string
+  createdAt: Date
+  updatedAt: Date
 }
 
-const userSchema : Schema<UserInterface> = new Schema({
-    username : {
-        type : String,
-        required : [true, "Username is required"],
-        unique : true,
-        trim : true
+const userSchema: Schema<UserInterface> = new Schema(
+  {
+    username: {
+      type: String,
+      required: [true, "Username is required"],
+      unique: true,
+      trim: true,
     },
-    fullName : {
-        type : String,
+    fullName: {
+      type: String,
     },
-    email : {
-        type : String,
-        required : [true, "Email is required"],
-        unique : true,
-        match: [/.+\@.+\..+/, "Please enter a valid email address"]
+    email: {
+      type: String,
+      required: [true, "Email is required"],
+      unique: true,
+      match: [/.+\@.+\..+/, "Please enter a valid email address"],
     },
-    password : {
-        type : String,
-        required : [true, "Password is required"]
+    password: {
+      type: String,
+      required: [true, "Password is required"],
     },
-    avatar : {
-        type : String,
-        default : "https://res.cloudinary.com/cforchobar/image/upload/v1717658011/memory-map/default-avatar_y7fhqs.png"
+    avatar: {
+      fileId: { type: String },
+      url: {
+        type: String,
+        default:
+          "https://res.cloudinary.com/cforchobar/image/upload/v1717658011/memory-map/default-avatar_y7fhqs.png",
+      },
     },
-    verifyCode : {
-        type : String,
-        required : [true, "Verify Code is required"],
+    verifyCode: {
+      type: String,
+      required: [true, "Verify Code is required"],
     },
-    verifyCodeExpiry : {
-        type : Date,
-        required : [true, "Verify Code Expiry is required"],
+    verifyCodeExpiry: {
+      type: Date,
+      required: [true, "Verify Code Expiry is required"],
     },
-    isVerified : {
-        type : Boolean,
-        default : false
+    isVerified: {
+      type: Boolean,
+      default: false,
     },
-    refreshToken : {
-        type : String
-    }
-}, {timestamps : true})
+    refreshToken: {
+      type: String,
+    },
+  },
+  { timestamps: true }
+)
 
 export const UserModel = mongoose.model<UserInterface>("User", userSchema)

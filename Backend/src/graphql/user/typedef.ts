@@ -4,9 +4,14 @@ export const typeDefs = `#graphql
         username : String
         fullName : String
         email : String
-        avatar : String
+        avatar : Avatar
         createdAt : Date
         updatedAt : Date
+    }
+
+    type Avatar {
+        fileId : String
+        url : String
     }
     
     type AuthPayload {
