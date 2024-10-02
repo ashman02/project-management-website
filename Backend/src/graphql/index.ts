@@ -1,5 +1,7 @@
 import { ApolloServer } from "@apollo/server"
 import { User } from "./user"
+import { Project } from "./project"
+import { Task } from "./task"
 import { GraphQLScalarType, Kind } from "graphql"
 
 const dateScalar = new GraphQLScalarType({
@@ -32,20 +34,30 @@ async function createGraphqlServer() {
     typeDefs: `
             scalar Date
             ${User.typeDefs}
+            ${Project.typeDefs}
+            ${Task.typeDefs}
             type Query {
                 ${User.queries}
+                ${Project.queries}
+                ${Task.queries}
             }
             type Mutation {
                 ${User.mutations}
+                ${Project.mutations}
+                ${Task.mutations}
             }
         `,
     resolvers: {
       Date: dateScalar,
       Query: {
         ...User.resolvers.queries,
+        ...Project.resolvers.queries,
+        ...Task.resolvers.queries,
       },
       Mutation: {
         ...User.resolvers.mutations,
+        ...Project.resolvers.mutations,
+        ...Task.resolvers.mutations,
       },
     },
   })
