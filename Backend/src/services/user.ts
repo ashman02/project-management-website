@@ -247,7 +247,7 @@ class UserService {
   public static async logoutUser(context: JwtPayload) {
     try {
       if (!context || !context.user) {
-        throw new GraphQLError("Unauthorized request - please login to logout")
+        throw new GraphQLError("Unauthorized request")
       }
 
       await UserModel.findByIdAndUpdate(

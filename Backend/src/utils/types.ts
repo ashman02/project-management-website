@@ -27,3 +27,8 @@ export interface AvatarPayload {
     fileId : string
     url : string
 }
+
+export interface CreateProjectPayload {
+    name : string
+    description? : string
+}

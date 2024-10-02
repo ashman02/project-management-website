@@ -3,7 +3,7 @@ export const typeDefs = `#graphql
         _id : ID!
         name : String!
         description : String
-        onwer : User!
+        owner : User!
         managers : [User]
         members : [User]
         tasks : [Task]
