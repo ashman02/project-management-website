@@ -32,3 +32,12 @@ export interface CreateProjectPayload {
     name : string
     description? : string
 }
+
+export interface ProjectIdPayload {
+    projectId : string
+}
+
+export interface ChangeProjectStatus {
+    projectId : string
+    status : "In Progress" | "Completed" | "On Hold"
+}
