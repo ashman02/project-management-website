@@ -4,7 +4,8 @@
   "description": "This is backend for Real Time Project Management App",
   "main": "src/index.ts",
   "scripts": {
-    "start": "nodemon -r dotenv/config src/index.ts"
+    "dev": "nodemon -r dotenv/config src/index.ts",
+    "start": "src/index.ts"
   },
   "author": "",
   "license": "ISC",
@@ -16,7 +17,8 @@
     "graphql": "^16.9.0",
     "jsonwebtoken": "^9.0.2",
     "mongoose": "^8.6.3",
-    "nodemailer": "^6.9.15"
+    "nodemailer": "^6.9.15",
+    "socket.io": "^4.8.1"
   },
   "devDependencies": {
     "@types/bcrypt": "^5.0.2",

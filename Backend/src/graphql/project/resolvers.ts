@@ -1,5 +1,5 @@
 import { JwtPayload } from "jsonwebtoken"
-import { ProjectIdPayload, CreateProjectPayload, ChangeProjectStatus } from "../../utils/types"
+import { ProjectIdPayload, CreateProjectPayload, ChangeProjectStatus } from "../../types/types"
 import ProjectService from "../../services/project"
 
 const mutations = {

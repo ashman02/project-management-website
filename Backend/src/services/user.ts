@@ -8,7 +8,7 @@ import {
   loginPayload,
   RegisterUserPayload,
   VerifyUserPayload,
-} from "../utils/types"
+} from "../types/types"
 import jwt, { JwtPayload } from "jsonwebtoken"
 
 class UserService {

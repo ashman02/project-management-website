@@ -1,5 +1,5 @@
 import { GraphQLError } from "graphql";
-import { ProjectIdPayload, CreateProjectPayload, ChangeProjectStatus } from "../utils/types";
+import { ProjectIdPayload, CreateProjectPayload, ChangeProjectStatus } from "../types/types";
 import ProjectModel from "../models/project.model";
 import { JwtPayload } from "jsonwebtoken";
 import mongoose from "mongoose";

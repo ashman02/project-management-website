@@ -6,12 +6,27 @@ import dotenv from "dotenv"
 import connectDB from "./db"
 import UserService from "./services/user"
 
+import http from "http"
+import {Server} from "socket.io"
+import {InitializeSocketIO} from "./socket"
+
 dotenv.config({
   path: "./.env",
 })
 
 async function init() {
   const app = express()
+
+  const server = http.createServer(app)
+  const io = new Server(server, {
+    pingTimeout : 60000,
+    cors : {
+      origin : process.env.FRONTEND_URL,
+      credentials : true
+    }
+  })
+
+  app.set("io", io)
 
   app.use(cors())
 
@@ -42,7 +57,9 @@ async function init() {
     })
   )
 
-  app.listen(process.env.PORT || 8000, () =>
+  InitializeSocketIO(io)
+
+  server.listen(process.env.PORT || 8000, () =>
     console.log("App is listening to the post 8000")
   )
 }

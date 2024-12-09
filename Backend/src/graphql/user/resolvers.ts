@@ -5,7 +5,7 @@ import {
   loginPayload,
   RegisterUserPayload,
   VerifyUserPayload,
-} from "../../utils/types"
+} from "../../types/types"
 
 const queries = {
   getCurrentUser: async (_: any, params: any, context: JwtPayload) => {
