@@ -1,6 +1,7 @@
 import { GraphQLError } from "graphql";
 import { ProjectIdPayload, CreateProjectPayload, ChangeProjectStatus } from "../types/types";
 import ProjectModel from "../models/project.model";
+import NotificationModel from "../models/notification.model";
 import { JwtPayload } from "jsonwebtoken";
 import mongoose from "mongoose";
 
@@ -17,7 +18,9 @@ class ProjectService {
             const project = await ProjectModel.create({
                 name,
                 description,
-                onwer : userDetails.user._id
+                onwer : userDetails.user._id,
+                managers : [userDetails.user._id],
+                members : [userDetails.user._id]
             })
             return project.name
         } catch (error) {
@@ -84,6 +87,34 @@ class ProjectService {
             if(error instanceof GraphQLError) throw error
             console.log("error while getting project", error)
             throw new GraphQLError("Unexpected error occured while getting project")
+        }
+    }
+
+    public static async requestManager(payload : {managerId : string, projectId : string}, userDetails : JwtPayload){
+        try {
+            const {managerId, projectId} = payload
+            if(!userDetails || !userDetails.user){
+                throw new GraphQLError("Unauthorized request")
+            }
+            const project = await ProjectModel.findById(projectId)
+            if(!project) throw new GraphQLError("Project not found")
+            if(!project.managers.includes(userDetails.user._id)){
+                throw new GraphQLError("You are not a manager of this project")
+            }
+
+            const notification = await NotificationModel.create({
+                message: `You have been requested to be a manager of ${project.name}`,
+                to : managerId,
+                from : userDetails.user._id,
+                projectId 
+            })
+
+            return "Request sent successfully"
+
+        } catch (error) {
+            if(error instanceof GraphQLError) throw error
+            console.log("error while adding manager", error)
+            throw new GraphQLError("Unexpected error occured while requesting manager")
         }
     }
 
