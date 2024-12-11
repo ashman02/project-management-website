@@ -1,3 +1,5 @@
+import { Server } from "socket.io"
+import { UserInterface } from "../models/user.model"
 
 
 export interface RegisterUserPayload {
@@ -17,6 +19,11 @@ export interface JwtGeneratePayload  {
     username : string
     email : string
     fullName? : string
+}
+
+export interface ContextInterface {
+    user? : UserInterface
+    io? : Server
 }
 
 export interface loginPayload {

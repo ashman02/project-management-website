@@ -10,6 +10,7 @@ import {
   VerifyUserPayload,
 } from "../types/types"
 import jwt, { JwtPayload } from "jsonwebtoken"
+import { ContextInterface } from "../types/types"
 
 class UserService {
   private static async generateAccessToken(payload: JwtGeneratePayload) {
@@ -244,7 +245,7 @@ class UserService {
     }
   }
 
-  public static async logoutUser(context: JwtPayload) {
+  public static async logoutUser(context: ContextInterface) {
     try {
       if (!context || !context.user) {
         throw new GraphQLError("Unauthorized request")
@@ -268,7 +269,7 @@ class UserService {
     }
   }
 
-  public static async getCurrectUser(context: JwtPayload) {
+  public static async getCurrectUser(context: ContextInterface) {
     try {
       if (!context || !context.user) {
         throw new GraphQLError("Unauthorized request")
@@ -316,7 +317,7 @@ class UserService {
 
   public static async updateUserAvatar(payload: {
     avatar: AvatarPayload
-    userDetails: JwtPayload
+    userDetails: ContextInterface
   }) {
     const { avatar, userDetails } = payload
     try {

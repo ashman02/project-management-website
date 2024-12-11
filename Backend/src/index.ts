@@ -9,6 +9,8 @@ import UserService from "./services/user"
 import http from "http"
 import {Server} from "socket.io"
 import {InitializeSocketIO} from "./socket"
+import { UserModel } from "./models/user.model"
+import { JwtPayload } from "jsonwebtoken"
 
 dotenv.config({
   path: "./.env",
@@ -25,8 +27,6 @@ async function init() {
       credentials : true
     }
   })
-
-  app.set("io", io)
 
   app.use(cors())
 
@@ -48,10 +48,11 @@ async function init() {
       context: async ({ req }) => {
         const accessToken = req.headers["authorization"] as string
         try {
-          const user = await UserService.decodeAccessToken(accessToken)
-          return { user }
+          const decodedToken = await UserService.decodeAccessToken(accessToken) as JwtPayload
+          const user = await UserModel.findById(decodedToken._id).select("-password -refreshToken -verifyCode -verifyCodeExpiry")
+          return { user, io }
         } catch (error) {
-          return {}
+          return {io}
         }
       },
     })

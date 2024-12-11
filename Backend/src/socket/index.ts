@@ -4,7 +4,6 @@ import jwt from "jsonwebtoken"
 import { UserModel } from "../models/user.model"
 import { Server, Socket } from "socket.io"
 import { JwtGeneratePayload } from "../types/types"
-import { Request } from "express"
 import { GraphQLError } from "graphql"
 
 const mountJoinChatEvent = (socket: Socket) => {
@@ -79,12 +78,12 @@ const InitializeSocketIO = (io: Server) => {
 }
 
 const emitSocketEvent = (
-  req: Request,
+  io: Server,
   roomId: string,
   eventName: string,
   payload: any
 ) => {
-  req.app.get("io").in(roomId).emit(eventName, payload)
+  io.in(roomId).emit(eventName, payload)
 }
 
 export { InitializeSocketIO, emitSocketEvent }

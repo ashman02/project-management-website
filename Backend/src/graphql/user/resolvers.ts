@@ -1,4 +1,4 @@
-import { JwtPayload } from "jsonwebtoken"
+import { ContextInterface } from "../../types/types"
 import UserService from "../../services/user"
 import {
   AvatarPayload,
@@ -8,7 +8,7 @@ import {
 } from "../../types/types"
 
 const queries = {
-  getCurrentUser: async (_: any, params: any, context: JwtPayload) => {
+  getCurrentUser: async (_: any, params: any, context: ContextInterface) => {
     return await UserService.getCurrectUser(context)
   },
   checkUniqueUsername: async (_: any, payload: { username: string }) => {
@@ -31,10 +31,10 @@ const mutations = {
   ) => {
     return await UserService.refreshAccessToken(payload)
   },
-  logoutUser: async (_: any, para: any, context: JwtPayload) => {
+  logoutUser: async (_: any, para: any, context: ContextInterface) => {
     return await UserService.logoutUser(context)
   },
-  updateUserAvatar: async (_: any, avatar : AvatarPayload, context : JwtPayload) => {
+  updateUserAvatar: async (_: any, avatar : AvatarPayload, context : ContextInterface) => {
     console.log(avatar)
     return await UserService.updateUserAvatar({avatar, userDetails: context})
   }
