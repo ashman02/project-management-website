@@ -1,17 +1,18 @@
 import mongoose, {Document, Schema, Types} from "mongoose";
 
-export interface NotificationSchemaInterface extends Document {
+export interface RequestSchemaInterface extends Document {
     message : string
     to : Types.ObjectId
     from : Types.ObjectId
     projectId : Types.ObjectId
     status : "PENDING" | "ACCEPTED" | "REJECTED"
+    type : "MANAGER_REQUEST" | "TASK_REQUEST" | "MEMBER_REQUEST" | "GENERAL"
     expiresAt : Date
     createdAt : Date
     updatedAt : Date
 }
 
-const notificationSchema : Schema<NotificationSchemaInterface> = new Schema({
+const requestSchema : Schema<RequestSchemaInterface> = new Schema({
     message : {
         type : String,
         required : true
@@ -33,6 +34,11 @@ const notificationSchema : Schema<NotificationSchemaInterface> = new Schema({
         enum : ["PENDING", "ACCEPTED", "REJECTED"],
         default : "PENDING"
     },
+    type : {
+        type : String,
+        enum : ["MANAGER_REQUEST", "TASK_REQUEST", "MEMBER_REQUEST", "GENERAL"],
+        default : "GENERAL"
+    },
     expiresAt : {
         type : Date,
         default : Date.now() + 24 * 60 * 60 * 1000
@@ -41,6 +47,6 @@ const notificationSchema : Schema<NotificationSchemaInterface> = new Schema({
     timestamps : true
 })
 
-const NotificationModel = mongoose.model<NotificationSchemaInterface>("Notification", notificationSchema)
+const RequestModel = mongoose.model<RequestSchemaInterface>("Request", requestSchema)
 
-export default NotificationModel
+export default RequestModel
