@@ -2,6 +2,7 @@ import { ApolloServer } from "@apollo/server"
 import { User } from "./user"
 import { Project } from "./project"
 import { Task } from "./task"
+import { Request } from "./request"
 import { GraphQLScalarType, Kind } from "graphql"
 
 const dateScalar = new GraphQLScalarType({
@@ -36,15 +37,18 @@ async function createGraphqlServer() {
             ${User.typeDefs}
             ${Project.typeDefs}
             ${Task.typeDefs}
+            ${Request.typeDefs}
             type Query {
                 ${User.queries}
                 ${Project.queries}
                 ${Task.queries}
+                ${Request.queries}
             }
             type Mutation {
                 ${User.mutations}
                 ${Project.mutations}
                 ${Task.mutations}
+                ${Request.mutations}
             }
         `,
     resolvers: {
@@ -53,11 +57,13 @@ async function createGraphqlServer() {
         ...User.resolvers.queries,
         ...Project.resolvers.queries,
         ...Task.resolvers.queries,
+        ...Request.resolvers.queries,
       },
       Mutation: {
         ...User.resolvers.mutations,
         ...Project.resolvers.mutations,
         ...Task.resolvers.mutations,
+        ...Request.resolvers.mutations,
       },
     },
   })

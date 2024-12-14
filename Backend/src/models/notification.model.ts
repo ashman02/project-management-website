@@ -7,7 +7,7 @@ export interface RequestSchemaInterface extends Document {
     projectId : Types.ObjectId
     status : "PENDING" | "ACCEPTED" | "REJECTED"
     type : "MANAGER_REQUEST" | "TASK_REQUEST" | "MEMBER_REQUEST" | "GENERAL"
-    expiresAt : Date
+    expireAt : Date
     createdAt : Date
     updatedAt : Date
 }
@@ -39,9 +39,10 @@ const requestSchema : Schema<RequestSchemaInterface> = new Schema({
         enum : ["MANAGER_REQUEST", "TASK_REQUEST", "MEMBER_REQUEST", "GENERAL"],
         default : "GENERAL"
     },
-    expiresAt : {
+    expireAt : {
         type : Date,
-        default : Date.now() + 24 * 60 * 60 * 1000
+        default : Date.now,
+        expires : "1d" // 24 * 60 * 60 
     }
 }, {
     timestamps : true

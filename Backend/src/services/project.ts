@@ -173,6 +173,8 @@ class ProjectService {
         throw new GraphQLError("User is already a manager of this project")
       }
 
+      //before sending request make sure you do not send request to yourself and twice
+
       const notification = await RequestModel.create({
         message: `You have been requested to be a manager of ${project.name}`,
         to: managerId,

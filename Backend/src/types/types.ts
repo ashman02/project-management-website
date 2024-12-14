@@ -50,3 +50,9 @@ export interface ChangeProjectStatus {
     projectId : string
     status : "In Progress" | "Completed" | "On Hold"
 }
+
+export interface RequestPayloadInterface {
+    projectId : string
+    managerId : string
+    notificationId : string
+}
